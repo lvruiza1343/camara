@@ -61,6 +61,20 @@ st.caption(f"🐍 Versión de Python: {platform.python_version()}")
 
 # Título
 st.title("Reconocimiento de Imágenes")
+h1 {
+    background: -webkit-linear-gradient(45deg, #00ff99, #ff69b4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 30px;
+    animation: moveText 5s infinite alternate ease-in-out;
+}
+
+@keyframes moveText {
+    0% { letter-spacing: 2px; transform: scale(1); }
+    100% { letter-spacing: 5px; transform: scale(1.05); }
+}
 
 # Imagen decorativa (puedes cambiar la ruta)
 image = Image.open('mente.jpg')  # cámbiala por tu propia imagen si quieres
