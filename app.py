@@ -4,8 +4,6 @@ import numpy as np
 from PIL import Image as Image, ImageOps as ImagOps
 from keras.models import load_model
 import platform
-import base64
-import io
 
 # Carga del modelo
 model = load_model('keras_model.h5')
@@ -15,7 +13,7 @@ data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
+        
         html, body, [class*="css"] {
             font-family: 'Poppins', sans-serif;
         }
@@ -27,12 +25,6 @@ st.markdown("""
             font-size: 40px;
             text-align: center;
             margin-bottom: 30px;
-            animation: moveText 4s infinite alternate ease-in-out;
-        }
-
-        @keyframes moveText {
-            0% { letter-spacing: 1px; transform: scale(1); }
-            100% { letter-spacing: 4px; transform: scale(1.07); }
         }
 
         h2, h3 {
@@ -60,13 +52,6 @@ st.markdown("""
         .probabilidad {
             color: #00ff99;
             font-size: 24px;
-            text-align: center;
-        }
-
-        img {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -74,30 +59,38 @@ st.markdown("""
 # Muestra versión de Python
 st.caption(f"🐍 Versión de Python: {platform.python_version()}")
 
-# Título animado
+# Título
 st.title("Reconocimiento de Imágenes")
 
-# Imagen centrada (mente.jpg)
-image = Image.open("mente.jpg")
-buffered = io.BytesIO()
-image.save(buffered, format="PNG")
-img_b64 = base64.b64encode(buffered.getvalue()).decode()
-st.markdown(
-    f"""
-    <div style='text-align: center;'>
-        <img src='data:image/png;base64,{img_b64}' width='350'/>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Imagen decorativa (puedes cambiar la ruta)
+image = Image.open('nueva_imagen.jpg')  # cámbiala por tu propia imagen si quieres
+st.image(image, width=350)
 
 # Sidebar
 with st.sidebar:
     st.markdown("### 🧠 Usa un modelo entrenado con [Teachable Machine](https://teachablemachine.withgoogle.com/) para identificar gestos desde la cámara.")
 
 # Entrada de cámara
-st.markdown("<div class='camera-label'>📸 Toma una Foto</div>", unsafe_allow_html=True)
+st.markdown("<div class='camera-label'>Toma una Foto</div>", unsafe_allow_html=True)
+img_file_buffer = st.camera_input("")
 
+# Procesamiento de imagen
+if img_file_buffer is not None:
+    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+    img = Image.open(img_file_buffer)
+    img = img.resize((224, 224))
+    img_array = np.array(img)
+
+    normalized_image_array = (img_array.astype(np.float32) / 127.0) - 1
+    data[0] = normalized_image_array
+
+    prediction = model.predict(data)
+
+    if prediction[0][0] > 0.5:
+        st.markdown(f"<div class='probabilidad'>🖐 Mano abierta, con probabilidad: {prediction[0][0]:.2f}</div>", unsafe_allow_html=True)
+
+    if prediction[0][1] > 0.5:
+        st.markdown(f"<div class='probabilidad'>✊ Mano cerrada, con probabilidad: {prediction[0][1]:.2f}</div>", unsafe_allow_html=True)
 
 
 
