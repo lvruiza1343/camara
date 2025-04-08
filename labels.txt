@@ -1,2 +1,2 @@
-0 Family 1
-1 Family 2
+0 mano abierta
+1 mano cerrada
