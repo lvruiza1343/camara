@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-from PIL import Image as Image, ImageOps as ImagOps
+from PIL import Image
 from keras.models import load_model
 import platform
 
@@ -25,6 +25,12 @@ st.markdown("""
             font-size: 40px;
             text-align: center;
             margin-bottom: 30px;
+            animation: moveText 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveText {
+            0% { letter-spacing: 2px; transform: scale(1); }
+            100% { letter-spacing: 5px; transform: scale(1.05); }
         }
 
         h2, h3 {
@@ -52,6 +58,7 @@ st.markdown("""
         .probabilidad {
             color: #00ff99;
             font-size: 24px;
+            text-align: center;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -61,23 +68,9 @@ st.caption(f"🐍 Versión de Python: {platform.python_version()}")
 
 # Título
 st.title("Reconocimiento de Imágenes")
-h1 {
-    background: -webkit-linear-gradient(45deg, #00ff99, #ff69b4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 40px;
-    text-align: center;
-    margin-bottom: 30px;
-    animation: moveText 5s infinite alternate ease-in-out;
-}
 
-@keyframes moveText {
-    0% { letter-spacing: 2px; transform: scale(1); }
-    100% { letter-spacing: 5px; transform: scale(1.05); }
-}
-
-# Imagen decorativa (puedes cambiar la ruta)
-image = Image.open('mente.jpg')  # cámbiala por tu propia imagen si quieres
+# Imagen decorativa
+image = Image.open('mente.jpg')  # Asegúrate de que este archivo esté en tu carpeta
 st.image(image, width=350)
 
 # Sidebar
@@ -85,12 +78,11 @@ with st.sidebar:
     st.markdown("### 🧠 Usa un modelo entrenado con [Teachable Machine](https://teachablemachine.withgoogle.com/) para identificar gestos desde la cámara.")
 
 # Entrada de cámara
-st.markdown("<div class='camera-label'>Toma una Foto</div>", unsafe_allow_html=True)
+st.markdown("<div class='camera-label'>📸 Toma una Foto</div>", unsafe_allow_html=True)
 img_file_buffer = st.camera_input("")
 
 # Procesamiento de imagen
 if img_file_buffer is not None:
-    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
     img = Image.open(img_file_buffer)
     img = img.resize((224, 224))
     img_array = np.array(img)
@@ -105,6 +97,7 @@ if img_file_buffer is not None:
 
     if prediction[0][1] > 0.5:
         st.markdown(f"<div class='probabilidad'>✊ Mano cerrada, con probabilidad: {prediction[0][1]:.2f}</div>", unsafe_allow_html=True)
+
 
 
 
