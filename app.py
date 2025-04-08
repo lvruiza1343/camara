@@ -63,7 +63,7 @@ st.caption(f"🐍 Versión de Python: {platform.python_version()}")
 st.title("Reconocimiento de Imágenes")
 
 # Imagen decorativa (puedes cambiar la ruta)
-image = Image.open('nueva_imagen.jpg')  # cámbiala por tu propia imagen si quieres
+image = Image.open('mente.jpg')  # cámbiala por tu propia imagen si quieres
 st.image(image, width=350)
 
 # Sidebar
