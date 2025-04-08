@@ -71,7 +71,7 @@ st.title("Reconocimiento de Imágenes")
 
 # Imagen decorativa
 image = Image.open('mente.jpg')  # Asegúrate de que este archivo esté en tu carpeta
-st.image(image, width=500)
+st.image(image, height=600 ,width=500)
 
 # Sidebar
 with st.sidebar:
