@@ -69,9 +69,25 @@ st.caption(f"🐍 Versión de Python: {platform.python_version()}")
 # Título
 st.title("Reconocimiento de Imágenes")
 
-# Imagen decorativa
+# Imagen decorativa centrada
 image = Image.open('mente.jpg')  # Asegúrate de que este archivo esté en tu carpeta
-st.image(image, width=350)
+
+# Convertimos la imagen a base64 para que funcione con HTML
+import base64
+from io import BytesIO
+
+buffered = BytesIO()
+image.save(buffered, format="JPEG")
+img_str = base64.b64encode(buffered.getvalue()).decode()
+
+st.markdown(
+    f"""
+    <div style="text-align: center;">
+        <img src="data:image/jpeg;base64,{img_str}" width="350">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # Sidebar
 with st.sidebar:
