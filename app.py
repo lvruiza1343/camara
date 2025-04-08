@@ -96,7 +96,8 @@ with st.sidebar:
     st.markdown("### 🧠 Usa un modelo entrenado con [Teachable Machine](https://teachablemachine.withgoogle.com/) para identificar gestos desde la cámara.")
 
 # Entrada de cámara
-st.markdown("<div class='camera-label'>📸 Toma una Foto</div
+st.markdown("<div class='camera-label'>📸 Toma una Foto</div>", unsafe_allow_html=True)
+
 
 
 
